@@ -83,8 +83,8 @@ VENDOR_KERNEL_WHITELIST = {}
 VENDOR_FOREACH_WHITELIST = {
     "device/qcom/common/utils.mk",
     "device/qcom/bengal_612s_32go/bengal_612s_32go.mk",
-    "device/qcom/wlan/bengal/BoardConfigWlan.mk",
-    "device/qcom/wlan/bengal/wlan.mk",
+    "device/qcom/wlan/bengal_32go/BoardConfigWlan.mk",
+    "device/qcom/wlan/bengal_32go/wlan.mk",
     "vendor/qcom/opensource/audio-hal/primary-hal/configs/bengal/bengal.mk",
     "vendor/qcom/proprietary/android-perf-noship/profiles.mk",
     "vendor/qcom/proprietary/android-perf/profiles.mk",
@@ -97,7 +97,7 @@ VENDOR_FOREACH_WHITELIST = {
 
 VENDOR_MACRO_WHITELIST = {
     "device/qcom/sepolicy_vndr/SEPolicy.mk",
-    "device/qcom/wlan/bengal/BoardConfigWlan.mk",
+    "device/qcom/wlan/bengal_32go/BoardConfigWlan.mk",
     "hardware/qcom/display/config/display-product.mk",
     "hardware/qcom/media/product.mk",
     "vendor/qcom/opensource/audio-hal/primary-hal/configs/bengal/bengal.mk",

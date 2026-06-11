@@ -7,9 +7,6 @@ BUILD_BROKEN_DUP_RULES := true
 ALLOW_MISSING_DEPENDENCIES := true
 RELAX_USES_LIBRARY_CHECK := true
 
-#Flag to Enable 64 bit only configurayion
-TARGET_SUPPORTS_64_BIT_ONLY := true
-
 # Enable AVB 2.0
 BOARD_AVB_ENABLE := true
 
@@ -18,6 +15,13 @@ ENABLE_AB ?= true
 
 # Enable virtual A/B
 ENABLE_VIRTUAL_AB := true
+
+# Disable verified boot checks in abl if AVB is not enabled
+ifeq ($(BOARD_AVB_ENABLE), true)
+BOARD_ABL_SIMPLE := false
+else
+BOARD_ABL_SIMPLE := true
+endif
 
 # Enable virtual A/B compression
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
@@ -45,6 +49,10 @@ PRODUCT_SHIPPING_API_LEVEL := 36
 BOARD_SHIPPING_API_LEVEL := 202504
 # For QSSI builds, we should skip building the system image. Instead we build the
 # "non-system" images (that we support).
+
+# 32bit support
+TARGET_HAS_LOW_RAM := true
+TARGET_USES_64_BIT_BINDER := true
 
 PRODUCT_BUILD_SYSTEM_IMAGE := false
 PRODUCT_BUILD_SYSTEM_OTHER_IMAGE := false
@@ -147,9 +155,9 @@ PRODUCT_PROPERTY_OVERRIDES += ro.control_privapp_permissions=enforce
 
 TARGET_DEFINES_DALVIK_HEAP := true
 
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
-$(call inherit-product, device/qcom/vendor-common/common64.mk)
+$(call inherit-product, device/qcom/vendor-common/common.mk)
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
+PRODUCT_VENDOR_PROPERTIES += ro.zygote=zygote32
 
 # Target naming
 PRODUCT_NAME := bengal_612s_32go
@@ -231,7 +239,7 @@ TARGET_USES_QMAA_OVERRIDE_VIBRATOR := false
 TARGET_USES_QMAA_OVERRIDE_DRM     := false
 TARGET_USES_QMAA_OVERRIDE_KMGK := false
 TARGET_USES_QMAA_OVERRIDE_VPP := false
-TARGET_USES_QMAA_OVERRIDE_GP := true
+TARGET_USES_QMAA_OVERRIDE_GP := false
 TARGET_USES_QMAA_OVERRIDE_BIOMETRICS := true
 TARGET_USES_QMAA_OVERRIDE_SPCOM_UTEST := false
 TARGET_USES_QMAA_OVERRIDE_PERF := true
@@ -420,11 +428,25 @@ ifeq ($(TARGET_USES_QMAA), true)
 ifneq ($(TARGET_USES_QMAA_OVERRIDE_WLAN), true)
 include device/qcom/wlan/default/wlan.mk
 else
-include device/qcom/wlan/bengal/wlan.mk
+include device/qcom/wlan/bengal_32go/wlan.mk
 endif
 else
-include device/qcom/wlan/bengal/wlan.mk
+include device/qcom/wlan/bengal_32go/wlan.mk
 endif
+
+#----------------------------------------------------------------------
+# perf specific
+#----------------------------------------------------------------------
+ifeq ($(TARGET_USES_QMAA), true)
+    ifneq ($(TARGET_USES_QMAA_OVERRIDE_PERF), true)
+        TARGET_DISABLE_PERF_OPTIMIZATIONS := true
+    else
+        TARGET_DISABLE_PERF_OPTIMIZATIONS := false
+    endif
+else
+    TARGET_DISABLE_PERF_OPTIMIZATIONS := false
+endif
+# /* Disable perf opts */
 
 #------------------------
 # location specific
@@ -432,6 +454,30 @@ endif
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 FEATURE_SLIM_AP := false
 FEATURE_GPS_LOC_QSH := false
+
+##############################Go configs###########################################
+
+# Enable DM file preopting to reduce first boot time
+PRODUCT_DEX_PREOPT_GENERATE_DM_FILES := true
+
+PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := verify
+
+DONT_UNCOMPRESS_PRIV_APPS_DEXS := true
+
+# Reduces GC frequency of foreground apps by 50%
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.foreground-heap-growth-multiplier=2.0
+
+# Disable per_app memcg
+PRODUCT_PROPERTY_OVERRIDES += ro.config.per_app_memcg=false
+
+# Add Runtime Resource Overlay package
+PRODUCT_PACKAGES += \
+    FrameworksResTargetGo
+
+$(call inherit-product, build/target/product/go_defaults.mk)
+$(call inherit-product-if-exists, frameworks/base/data/sounds/AudioPackageGo.mk)
+
+#########################End of Go configs########################################
 
 # Enable support for APEX updates
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
