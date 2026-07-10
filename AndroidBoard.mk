@@ -126,7 +126,7 @@ endif
 # wlan specific
 #----------------------------------------------------------------------
 ifeq ($(strip $(BOARD_HAS_QCOM_WLAN)),true)
-include device/qcom/wlan/bengal/AndroidBoardWlan.mk
+include device/qcom/wlan/bengal_32go/AndroidBoardWlan.mk
 endif
 
 #----------------------------------------------------------------------
