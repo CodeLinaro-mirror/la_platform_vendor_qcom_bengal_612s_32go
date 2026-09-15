@@ -68,17 +68,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
         <version>1</version>
         <fqname>ISecureElement/eSE1</fqname>
     </hal>
-    <!-- NFC HAL service -->
-    <hal format="aidl">
-        <name>android.hardware.nfc</name>
-        <version>2</version>
-        <fqname>INfc/default</fqname>
-    </hal>
-    <hal format="aidl">
-        <name>vendor.nxp.nxpnfc_aidl</name>
-        <version>1</version>
-        <fqname>INxpNfc/default</fqname>
-    </hal>
     <!-- WifiStats HAL service -->
     <hal format="hidl">
         <name>vendor.qti.hardware.wifi.wifilearner</name>
