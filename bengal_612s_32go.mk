@@ -42,13 +42,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 # Enable Fuse Passthrough
 PRODUCT_PROPERTY_OVERRIDES += persist.sys.fuse.passthrough.enable=true
 
-SHIPPING_API_LEVEL := 36
-PRODUCT_SHIPPING_API_LEVEL := 36
+SHIPPING_API_LEVEL := 33
+PRODUCT_SHIPPING_API_LEVEL := 33
 
 # Set GRF/Vendor freeze properties
-BOARD_SHIPPING_API_LEVEL := 202504
-# For QSSI builds, we should skip building the system image. Instead we build the
-# "non-system" images (that we support).
+BOARD_SHIPPING_API_LEVEL :=33 
 
 # 32bit support
 TARGET_HAS_LOW_RAM := true
@@ -252,7 +250,7 @@ TARGET_USES_QMAA_OVERRIDE_TFTP := true
 TARGET_USES_QMAA_OVERRIDE_EID := true
 TARGET_USES_QMAA_OVERRIDE_USB := true
 
-TARGET_ENABLE_QSEECOM := false
+TARGET_ENABLE_QSEECOM := true
 #Full QMAA HAL List
 QMAA_HAL_LIST := audio video camera display sensors gps
 
