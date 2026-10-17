@@ -50,8 +50,10 @@ elif [ "$soc_id" -eq 470 ]; then
     setprop ro.vendor.qti.soc_model QCS4290
 elif [ "$soc_id" -eq 473 ]; then
     setprop ro.vendor.qti.soc_model QCM2290
+    setprop vendor.audio.feature.dmabuf.cma.memory.enable true
 elif [ "$soc_id" -eq 474 ]; then
     setprop ro.vendor.qti.soc_model QCS2290
+    setprop vendor.audio.feature.dmabuf.cma.memory.enable true
 elif [ "$soc_id" -eq 497 ]; then
     setprop ro.vendor.qti.soc_model QCM6490
 elif [ "$soc_id" -eq 498 ]; then
